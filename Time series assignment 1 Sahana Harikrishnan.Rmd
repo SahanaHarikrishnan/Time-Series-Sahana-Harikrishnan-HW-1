@@ -1,0 +1,136 @@
+---
+title: "Time series assignment 1"
+output: html_document
+date: "2025-02-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Import and view dataset structure
+```{r}
+employee<- read.csv("Typical_Employee_Survey_Data.csv", header = FALSE)
+str(employee)
+head(employee)
+```
+
+### Add headers to each column, and view head
+```{r}
+names(employee)[1] <- "Age"
+names(employee)[2] <- "Gender"
+names(employee)[3] <- "Job Satisfaction"
+names(employee)[4] <- "Important Job Characteristics"
+names(employee)[5] <- "Years With Current Employer"
+names(employee)[6] <- "Promotion Likelihood"
+names(employee)[7] <- "Decision Making Ability"
+names(employee)[8] <- "Budgetary Decision Participation"
+names(employee)[9] <- "Organization Pride"
+names(employee)[10] <- "Turn Down Higher Pay"
+names(employee)[11] <- "Coworker and Colleague Relations"
+
+head(employee)
+```
+
+### 5-point summary for all numerical columns
+```{r}
+agefivenum <- fivenum(employee$Age)
+cat("5-Point Summary for Age:\n")
+cat("Min:", agefivenum[1], "\n")
+cat("Q1:", agefivenum[2], "\n")
+cat("Median:", agefivenum[3], "\n")
+cat("Q3:", agefivenum[4], "\n")
+cat("Max:", agefivenum[5], "\n\n")
+
+yearsfivenum <- fivenum(employee$`Years With Current Employer`)
+cat("5-Point Summary for Years With Current Employer:\n")
+cat("Min:", yearsfivenum[1], "\n")
+cat("Q1:", yearsfivenum[2], "\n")
+cat("Median:", yearsfivenum[3], "\n")
+cat("Q3:", yearsfivenum[4], "\n")
+cat("Max:", yearsfivenum[5], "\n\n")
+
+```
+
+### Boxplots for all numerical columns
+```{r}
+boxplot(employee$Age, employee$`Years With Current Employer`)
+```
+
+### Convert Categorical columns to factor
+```{r}
+employee$Gender <- as.factor(employee$Gender)
+employee$`Job Satisfaction` <- as.factor(employee$`Job Satisfaction`)
+employee$`Important Job Characteristics` <- as.factor(employee$`Important Job Characteristics`)
+employee$`Promotion Likelihood` <- as.factor(employee$`Promotion Likelihood`)
+employee$`Decision Making Ability` <- as.factor(employee$`Decision Making Ability`)
+employee$`Budgetary Decision Participation` <- as.factor(employee$`Budgetary Decision Participation`)
+employee$`Organization Pride` <- as.factor(employee$`Organization Pride`)
+employee$`Turn Down Higher Pay` <- as.factor(employee$`Turn Down Higher Pay`)
+employee$`Coworker and Colleague Relations` <- as.factor(employee$`Coworker and Colleague Relations`)
+
+str(employee)
+head(employee)
+
+```
+
+### Appropriate visuals for numerical columns
+```{r}
+hist(employee$Age, main = "Histogram of Age", col = "turquoise", xlab = "Age", border = "black")
+
+
+hist(employee$`Years With Current Employer`, main = "Histogram of Years With Current Employer", col = "turquoise", xlab = "Years", border = "black")
+
+
+```
+
+### Appropriate visuals for numerical columns
+```{r}
+barplot(table(employee$Gender), main = "Gender Distribution", col = c("pink", "blue"))
+barplot(table(employee$`Job Satisfaction`), main = "Job Satisfaction Levels", col = rainbow(4))
+barplot(table(employee$`Important Job Characteristics`), main = "Important Job Characteristics", col = rainbow(5))
+barplot(table(employee$`Promotion Likelihood`), main = "Promotion Likelihood", col = rainbow(5))
+barplot(table(employee$`Decision Making Ability`), main = "Decision Making Ability", col = rainbow(4))
+barplot(table(employee$`Budgetary Decision Participation`), main = "Budgetary Decision Participation", col = rainbow(2))
+barplot(table(employee$`Organization Pride`), main = "Organization Pride", col = rainbow(4))
+barplot(table(employee$`Turn Down Higher Pay`), main = "Turn Down Higher Pay", col = rainbow(5))
+barplot(table(employee$`Coworker and Colleague Relations`), main = "Coworker and Colleague Relations", col = rainbow(5))
+
+```
+
+### Scatterplots
+```{r}
+plot(employee$Age, employee$`Years With Current Employer`, 
+     main = "Age vs. Years With Current Employer",
+     xlab = "Age", 
+     ylab = "Years With Current Employer",
+     col = "purple", 
+     pch = 16)
+
+plot(jitter(as.numeric(employee$`Job Satisfaction`)), employee$Age, 
+     main = "Age vs. Job Satisfaction",
+     xlab = "Job Satisfaction (1 = Very Satisfied, 4 = Very Dissatisfied)",
+     ylab = "Age",
+     col = "purple",
+     pch = 16)
+
+axis(1, at = 1:4, labels = levels(employee$`Job Satisfaction`))  
+
+
+plot(employee$`Years With Current Employer`, 
+     jitter(as.numeric(employee$`Coworker and Colleague Relations`)), 
+     main = "Years With Employer vs. Coworker Relations",
+     xlab = "Years With Current Employer", 
+     ylab = "Coworker Relations (1 = Very Good, 5 = Very Bad)",
+     col = "purple", 
+     pch = 16)
+
+
+axis(2, at = 1:4, labels = levels(employee$`Coworker and Colleague Relations`))
+
+
+
+```
+## Age and year with current employer predictably have a positive correlation, for job satisfaction, we can observe vertical clusters that show that one's satisfaction with their job is staying fairly constant even as their age increases, and for the coworker relations plots, we can observe horizontal clusters which show that coworker relations are staying fairly constant even if the years with current employer are increasing. 
+
+
